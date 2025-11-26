@@ -1,0 +1,55 @@
+#include <stdio.h>
+#define STACK_SIZE 3
+int top = -1;
+int num;
+int stack[10];
+int pop() {
+  if (top == -1) {
+    printf("Stack Underflow\n");
+    return -1;
+  }
+  return stack[top--];
+  }
+void push() {
+  if (top >= STACK_SIZE - 1) {
+    printf("Stack Overflow\n");
+  } else {
+    top = top + 1;
+    stack[top] = num;
+  }
+}
+void display() {
+  if (top == -1) {
+    printf("Stack is empty\n");
+  } else {
+    printf("Contents of stack:\n");
+    for (int i = 0; i <= top; i++) {
+    printf("%d\n", stack[i]);
+    }
+  }
+}
+int main() {
+  for (;;) {
+    int choice;
+    printf("1. Push 2. Pop 3. Display 4. Exit\nEnter your choice of modification: ");
+    scanf("%d", &choice);
+    if (choice == 1) {
+      printf("Enter number to be pushed into stack: ");
+      scanf("%d", &num);
+      push();
+    }else if (choice == 2) {
+      int n = pop();
+      if (n != -1) {
+      printf("Popped number is %d\n", n);
+      }  
+    } else if (choice == 3) {
+      display();
+    } else if (choice == 4) {
+      printf("Goodbye\n");
+      break;
+    } else {
+      printf("Invalid selection. Please try again.\n");
+      }
+    }
+  return 0;
+}
