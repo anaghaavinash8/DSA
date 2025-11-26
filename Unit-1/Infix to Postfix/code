@@ -1,0 +1,94 @@
+#include <stdio.h>
+#include <string.h>
+#include <ctype.h>
+#define MAX_SIZE 20
+
+char s[MAX_SIZE];
+int top = -1;
+char infix[MAX_SIZE];
+char postfix[MAX_SIZE];
+
+void push(char item) {
+  if (top >= MAX_SIZE - 1) {
+    printf("Overflow\n");
+    return;
+  }
+  s[++top] = item;
+}
+
+char pop() {
+  if (top == -1) {
+    printf("Underflow\n");
+    return -1;
+  }
+  return s[top--];
+
+}
+
+int sp(char item) {
+  switch (item) {
+    case '+':
+    case '-': return 2;
+    case '*':
+    case '/': return 4;
+    case '^':
+    case '$': return 5;
+    case '(':
+    case '#': return 0;
+  }
+  return 0;
+}
+
+int ip(char item) {
+  switch (item) {
+    case '+':
+    case '-': return 1;
+    case '*':
+    case '/': return 3;
+    case '^':
+    case '$': return 6;
+    case '(' : return 9;
+    case ')' : return 0;
+  }
+  return 7;
+}
+
+void inf_to_post() {
+  int j = 0;
+  char token;
+
+  push('#');
+
+  for (int i = 0; infix[i] != '\0'; i++) {
+    token = infix[i];
+  if (isalnum(token)) {
+    postfix[j++] = token;
+  } else if (token == '(') {
+    push(token);
+  } else if (token == ')') {
+    while (s[top] != '(') {
+      postfix[j++] = pop();
+  }
+
+  pop();
+
+  } else {
+    while (sp(s[top]) >= ip(token)) {
+      postfix[j++] = pop();
+  }
+  push(token);
+
+  }
+  }
+  while (s[top] != '#') {
+    postfix[j++] = pop();
+  }
+  postfix[j] = '\0';
+}
+
+int main() {
+  printf("Enter infix exp: ");
+  scanf("%s", infix);
+  inf_to_post();
+  printf("Postfix exp is %s\n", postfix);
+  return 0;}
