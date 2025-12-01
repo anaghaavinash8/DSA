@@ -1,0 +1,120 @@
+#include <stdio.h>
+#include <stdlib.h>
+
+typedef struct Node {
+    int data;
+    struct Node *next;
+} NODE;
+
+NODE* push(NODE* top, int value) {
+    NODE* newNode = (NODE*)malloc(sizeof(NODE));
+    newNode->data = value;
+    newNode->next = top;
+    return newNode;
+}
+
+NODE* pop(NODE* top) {
+    if (top == NULL) {
+        printf("Stack is empty!\n");
+        return NULL;
+    }
+    NODE* temp = top;
+    top = top->next;
+    free(temp);
+    return top;
+}
+
+void displayStack(NODE* top) {
+    NODE* temp = top;
+    printf("Stack: ");
+    while (temp != NULL) {
+        printf("%d ", temp->data);
+        temp = temp->next;
+    }
+    printf("\n");
+}
+
+
+NODE* enqueue(NODE* rear, NODE** front, int value) {
+    NODE* newNode = (NODE*)malloc(sizeof(NODE));
+    newNode->data = value;
+    newNode->next = NULL;
+    if (*front == NULL) {
+        *front = newNode;
+    } else {
+        rear->next = newNode;
+    }
+    return newNode; 
+}
+
+NODE* dequeue(NODE* front) {
+    if (front == NULL) {
+        printf("Queue is empty!\n");
+        return NULL;
+    }
+    NODE* temp = front;
+    front = front->next;
+    free(temp);
+    return front;
+}
+
+void displayQueue(NODE* front) {
+    NODE* temp = front;
+    printf("Queue: ");
+    while (temp != NULL) {
+        printf("%d ", temp->data);
+        temp = temp->next;
+    }
+    printf("\n");
+}
+
+int main() {
+    NODE* stackTop = NULL;
+    NODE* front = NULL;
+    NODE* rear = NULL;
+    int choice, value;
+
+    while (1) {
+        printf("\n--- Menu ---\n");
+        printf("1. Push to Stack\n");
+        printf("2. Pop from Stack\n");
+        printf("3. Display Stack\n");
+        printf("4. Enqueue to Queue\n");
+        printf("5. Dequeue from Queue\n");
+        printf("6. Display Queue\n");
+        printf("0. Exit\n");
+        printf("Enter your choice: ");
+        scanf("%d", &choice);
+
+        switch (choice) {
+            case 1:
+                printf("Enter value to push: ");
+                scanf("%d", &value);
+                stackTop = push(stackTop, value);
+                break;
+            case 2:
+                stackTop = pop(stackTop);
+                break;
+            case 3:
+                displayStack(stackTop);
+                break;
+            case 4:
+                printf("Enter value to enqueue: ");
+                scanf("%d", &value);
+                rear = enqueue(rear, &front, value);
+                break;
+            case 5:
+                front = dequeue(front);
+                if (front == NULL) rear = NULL; 
+                break;
+            case 6:
+                displayQueue(front);
+                break;
+            case 0:
+                printf("Exiting...\n");
+                return 0;
+            default:
+                printf("Invalid choice! Try again.\n");
+        }
+    }
+}
